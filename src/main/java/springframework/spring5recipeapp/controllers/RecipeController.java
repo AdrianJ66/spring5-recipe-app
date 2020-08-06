@@ -29,8 +29,8 @@ public class RecipeController {
         return "recipe/recipeform";
     }
 
-    @PostMapping
-    @RequestMapping("recipe")
+
+    @PostMapping("recipe")
     public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCommand) {
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(recipeCommand);
 
@@ -43,8 +43,8 @@ public class RecipeController {
         return  "recipe/recipeform";
     }
 
-    @GetMapping
-    @RequestMapping("recipe/{id}/delete")
+
+    @GetMapping("recipe/{id}/delete")
     public String deleteRecipe(@PathVariable String id) {
         log.debug("Deleting id: " + id);
         recipeService.deleteById(Long.valueOf(id));
