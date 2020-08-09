@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import springframework.spring5recipeapp.commands.RecipeCommand;
 import springframework.spring5recipeapp.domain.Recipe;
+import springframework.spring5recipeapp.exceptions.NotFoundException;
 import springframework.spring5recipeapp.services.RecipeService;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,5 +100,25 @@ class RecipeControllerTest {
                 .andExpect(view().name("redirect:/"));
 
         verify(recipeService, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    void testRecipeNotFound() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404Error"));
+    }
+
+    @Test
+    void testNumberFormatException() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/sadfasd/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400Error"));
     }
 }
