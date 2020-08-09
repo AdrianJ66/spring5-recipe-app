@@ -6,6 +6,7 @@ import springframework.spring5recipeapp.commands.RecipeCommand;
 import springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import springframework.spring5recipeapp.domain.Recipe;
+import springframework.spring5recipeapp.exceptions.NotFoundException;
 import springframework.spring5recipeapp.repositories.RecipeRepository;
 
 import javax.transaction.Transactional;
@@ -39,7 +40,8 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipe = recipeRepository.findById(l);
 
         if(!recipe.isPresent()) {
-            throw new RuntimeException("Recipe of this id is not present");
+//            throw new RuntimeException("Recipe of this id is not present");
+            throw new NotFoundException("Recipe of this id is not present. Searched Id was " + l);
         }
 
         return recipe.get();
